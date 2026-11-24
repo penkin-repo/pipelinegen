@@ -1,0 +1,35 @@
+# Build output
+build/bin
+frontend/dist
+*.exe
+*.exe~
+
+# Dependencies
+node_modules
+
+# Wails
+frontend/package.json.md5
+
+# Local user data (contains API key and saved pipelines)
+config.json
+projects/
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# Editors / IDE
+.idea/
+.vscode/
+.zed/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Env
+.env
+.env.*

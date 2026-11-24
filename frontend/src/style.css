@@ -1,0 +1,165 @@
+@import "tailwindcss";
+
+:root {
+  --bg: #F8F7F5;
+  --surface: #FFFFFF;
+  --surface-2: #FAF9F8;
+  --text: #161C14;
+  --muted: #60635F;
+  --border: #ACADA9;
+  --border-soft: #C5C6C3;
+  --accent: #E76C5C;        /* coral */
+  --accent-d: #C0513F;
+  --accent-soft: #F4DAD6;
+  --amber: #E0A458;         /* warm amber */
+  --amber-soft: #F5EBCF;
+  --green: #5CA354;
+  --green-soft: #D9ECD4;
+  --red: #C65D4E;
+  --red-soft: #F6E0DB;
+  --shadow: 0 1px 2px rgba(22, 28, 20, 0.06);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  user-select: none;
+}
+
+input, textarea, select, pre, code {
+  user-select: text;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cfcdc8;
+  border-radius: 8px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a8a6a0;
+  background-clip: content-box;
+}
+
+@keyframes pulseSlow {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.96); }
+}
+
+@keyframes pop {
+  from { transform: scale(0.96) translateY(8px); opacity: 0; }
+  to { transform: scale(1) translateY(0); opacity: 1; }
+}
+
+@keyframes slideIn {
+  from { transform: translateX(20px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+.animate-pop {
+  animation: pop 0.18s ease-out forwards;
+}
+
+.animate-pulse-slow {
+  animation: pulseSlow 1.4s infinite ease-in-out;
+}
+
+.animate-slide {
+  animation: slideIn 0.2s ease-out forwards;
+}
+
+/* Prose styles for rendered Markdown */
+.prose-custom p {
+  margin: 8px 0;
+  line-height: 1.6;
+}
+.prose-custom h1, .prose-custom h2, .prose-custom h3, .prose-custom h4 {
+  font-weight: 700;
+  margin: 16px 0 8px 0;
+  color: var(--text);
+  line-height: 1.3;
+}
+.prose-custom h1 { font-size: 1.35rem; }
+.prose-custom h2 { font-size: 1.2rem; }
+.prose-custom h3 { font-size: 1.05rem; }
+.prose-custom ul, .prose-custom ol {
+  margin: 8px 0;
+  padding-left: 22px;
+}
+.prose-custom li {
+  margin: 4px 0;
+}
+.prose-custom blockquote {
+  margin: 10px 0;
+  padding: 8px 14px;
+  border-left: 3px solid var(--accent);
+  background: var(--surface-2);
+  border-radius: 0 8px 8px 0;
+  color: #4a4d47;
+}
+
+/* Inline code only (not inside pre) */
+.prose-custom :not(pre) > code {
+  background: #ECEAE4;
+  color: #9C382A;
+  border: 1px solid #D8D6CE;
+  border-radius: 5px;
+  padding: 1.5px 5px;
+  font-size: 12px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+/* Code blocks (pre) */
+.prose-custom pre {
+  background: #181D17 !important;
+  color: #E2E8DF !important;
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: 1px solid #2C3529;
+  overflow-x: auto;
+  font-size: 12.5px;
+  line-height: 1.55;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  margin: 12px 0;
+}
+
+/* Code inside pre MUST inherit background and text color cleanly */
+.prose-custom pre code {
+  background: transparent !important;
+  color: inherit !important;
+  padding: 0 !important;
+  border: none !important;
+  border-radius: 0 !important;
+  font-size: inherit !important;
+  font-family: inherit !important;
+}
+
+.prose-custom hr {
+  border: 0;
+  border-top: 1px solid var(--border-soft);
+  margin: 16px 0;
+}
