@@ -1,0 +1,293 @@
+<Window x:Class="PipelineGenWpf.Views.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Настройки"
+        Icon="/Resources/app.ico"
+        Width="640"
+        Height="610"
+        MinWidth="540"
+        MinHeight="460"
+        WindowStartupLocation="CenterOwner"
+        Background="{StaticResource BgBrush}"
+        FontFamily="{StaticResource UiFont}"
+        ShowInTaskbar="False">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!-- Body -->
+        <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto" Padding="14,12">
+            <StackPanel>
+                <!-- API Key -->
+                <TextBlock Text="API-ключ OpenRouter:"
+                           FontSize="12"
+                           FontWeight="SemiBold"
+                           Foreground="{StaticResource LabelBrush}"
+                           Margin="0,0,0,4" />
+
+                <Grid Margin="0,0,0,12">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <PasswordBox x:Name="PwdApiKey"
+                                 Grid.Column="0"
+                                 Style="{StaticResource ModernPasswordBoxStyle}"
+                                 PasswordChanged="PwdApiKey_PasswordChanged"
+                                 LostFocus="ApiKey_LostFocus" />
+
+                    <TextBox x:Name="TxtApiKeyVisible"
+                             Grid.Column="0"
+                             Visibility="Collapsed"
+                             Style="{StaticResource MonoTextBoxStyle}"
+                             TextChanged="TxtApiKeyVisible_TextChanged"
+                             LostFocus="ApiKey_LostFocus" />
+
+                    <Button x:Name="BtnToggleKey"
+                            Grid.Column="1"
+                            Content="Показать"
+                            Click="BtnToggleKey_Click"
+                            Style="{StaticResource SecondaryButtonStyle}"
+                            Margin="6,0,0,0" />
+                </Grid>
+
+                <!-- Registry Header -->
+                <DockPanel Margin="0,0,0,6">
+                    <TextBlock DockPanel.Dock="Left"
+                               Text="Модели:"
+                               FontSize="12"
+                               FontWeight="SemiBold"
+                               Foreground="{StaticResource LabelBrush}"
+                               VerticalAlignment="Center" />
+
+                    <TextBlock x:Name="TxtModelsCount"
+                               DockPanel.Dock="Right"
+                               HorizontalAlignment="Right"
+                               VerticalAlignment="Center"
+                               FontSize="11"
+                               Foreground="{StaticResource MutedBrush}" />
+                </DockPanel>
+
+                <!-- Models List -->
+                <Border Background="{StaticResource SurfaceBrush}"
+                        BorderBrush="{StaticResource BorderSoftBrush}"
+                        BorderThickness="1"
+                        CornerRadius="3"
+                        Padding="6"
+                        MaxHeight="190"
+                        Margin="0,0,0,12">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <StackPanel x:Name="ModelsListPanel" />
+                    </ScrollViewer>
+                </Border>
+
+                <!-- Add Model Box -->
+                <Border Background="{StaticResource SurfaceBrush}"
+                        BorderBrush="{StaticResource BorderSoftBrush}"
+                        BorderThickness="1"
+                        CornerRadius="3"
+                        Padding="10">
+                    <StackPanel>
+                        <DockPanel Margin="0,0,0,8">
+                            <TextBlock DockPanel.Dock="Left"
+                                       Text="Добавить модель"
+                                       FontSize="12"
+                                       FontWeight="SemiBold"
+                                       Foreground="{StaticResource TextBrush}"
+                                       VerticalAlignment="Center" />
+                            <Button x:Name="BtnFetchCatalog"
+                                    DockPanel.Dock="Right"
+                                    HorizontalAlignment="Right"
+                                    Content="Каталог OpenRouter"
+                                    Click="BtnFetchCatalog_Click"
+                                    Style="{StaticResource SecondaryButtonStyle}"
+                                    FontSize="11"
+                                    MinHeight="22"
+                                    Padding="8,2" />
+                        </DockPanel>
+
+                        <!-- Catalog Browser -->
+                        <Border x:Name="CatalogPanel"
+                                Visibility="Collapsed"
+                                Background="{StaticResource Surface2Brush}"
+                                BorderBrush="{StaticResource BorderBrushMain}"
+                                BorderThickness="1"
+                                CornerRadius="3"
+                                Padding="8"
+                                Margin="0,0,0,8">
+                            <StackPanel>
+                                <DockPanel Margin="0,0,0,5">
+                                    <TextBlock DockPanel.Dock="Left"
+                                               Text="Поиск по каталогу:"
+                                               FontSize="11"
+                                               Foreground="{StaticResource LabelBrush}"
+                                               VerticalAlignment="Center" />
+                                    <Button DockPanel.Dock="Right"
+                                            HorizontalAlignment="Right"
+                                            Content="Закрыть"
+                                            Click="BtnCloseCatalog_Click"
+                                            Style="{StaticResource GhostButtonStyle}" />
+                                </DockPanel>
+
+                                <TextBox x:Name="TxtCatalogSearch"
+                                         Style="{StaticResource ModernTextBoxStyle}"
+                                         FontSize="11.5"
+                                         Padding="6,3"
+                                         Margin="0,0,0,5"
+                                         TextChanged="TxtCatalogSearch_TextChanged" />
+
+                                <ScrollViewer MaxHeight="135" VerticalScrollBarVisibility="Auto">
+                                    <StackPanel x:Name="CatalogItemsPanel" />
+                                </ScrollViewer>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Presets -->
+                        <TextBlock Text="Пресет:"
+                                   FontSize="11"
+                                   Foreground="{StaticResource MutedBrush}"
+                                   Margin="0,0,0,3" />
+                        <ComboBox x:Name="CmbPresets"
+                                  Style="{StaticResource ModernComboBoxStyle}"
+                                  SelectionChanged="CmbPresets_SelectionChanged"
+                                  Margin="0,0,0,8" />
+
+                        <!-- Manual ID & Name -->
+                        <Grid Margin="0,0,0,6">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="8" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Text="ID модели:"
+                                           FontSize="11"
+                                           Foreground="{StaticResource MutedBrush}"
+                                           Margin="0,0,0,3" />
+                                <TextBox x:Name="TxtNewModelId"
+                                         Style="{StaticResource MonoTextBoxStyle}"
+                                         FontSize="11.5"
+                                         Padding="6,4"
+                                         TextChanged="TxtNewModelId_TextChanged" />
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="Название:"
+                                           FontSize="11"
+                                           Foreground="{StaticResource MutedBrush}"
+                                           Margin="0,0,0,3" />
+                                <TextBox x:Name="TxtNewModelName"
+                                         Style="{StaticResource ModernTextBoxStyle}"
+                                         FontSize="11.5"
+                                         Padding="6,4" />
+                            </StackPanel>
+                        </Grid>
+
+                        <!-- :batch warning -->
+                        <Border x:Name="BatchWarningBanner"
+                                Visibility="Collapsed"
+                                Background="{StaticResource AmberSoftBrush}"
+                                BorderBrush="{StaticResource AmberBorderBrush}"
+                                BorderThickness="1"
+                                CornerRadius="3"
+                                Padding="8,5"
+                                Margin="0,0,0,6">
+                            <DockPanel>
+                                <Button DockPanel.Dock="Right"
+                                        Content="Убрать :batch"
+                                        Click="BtnCleanBatch_Click"
+                                        Style="{StaticResource SecondaryButtonStyle}"
+                                        FontSize="11"
+                                        MinHeight="22"
+                                        Padding="7,2"
+                                        Margin="8,0,0,0" />
+                                <TextBlock Text="Суффикс :batch не поддерживается в chat/completions."
+                                           FontSize="11"
+                                           Foreground="{StaticResource AmberTextBrush}"
+                                           TextWrapping="Wrap"
+                                           VerticalAlignment="Center" />
+                            </DockPanel>
+                        </Border>
+
+                        <!-- Vision Checkbox & Action Buttons -->
+                        <DockPanel Margin="0,4,0,0">
+                            <CheckBox x:Name="ChkNewVision"
+                                      DockPanel.Dock="Left"
+                                      Content="Vision (изображения)"
+                                      VerticalAlignment="Center"
+                                      FontSize="11.5"
+                                      Foreground="{StaticResource LabelBrush}" />
+
+                            <StackPanel DockPanel.Dock="Right"
+                                        Orientation="Horizontal"
+                                        HorizontalAlignment="Right">
+                                <Button x:Name="BtnForceAdd"
+                                        Content="Добавить"
+                                        Click="BtnForceAdd_Click"
+                                        Style="{StaticResource SecondaryButtonStyle}"
+                                        Margin="0,0,6,0" />
+                                <Button x:Name="BtnTestAndAdd"
+                                        Content="Проверить и добавить"
+                                        Click="BtnTestAndAdd_Click"
+                                        Style="{StaticResource PrimaryButtonStyle}" />
+                            </StackPanel>
+                        </DockPanel>
+
+                        <!-- Error Banner -->
+                        <Border x:Name="ErrorBanner"
+                                Visibility="Collapsed"
+                                Background="{StaticResource RedSoftBrush}"
+                                BorderBrush="{StaticResource RedBrush}"
+                                BorderThickness="1"
+                                CornerRadius="3"
+                                Padding="8,5"
+                                Margin="0,8,0,0">
+                            <TextBlock x:Name="TxtErrorBanner"
+                                       FontSize="11.5"
+                                       Foreground="{StaticResource RedBrush}"
+                                       TextWrapping="Wrap" />
+                        </Border>
+
+                        <!-- Success Banner -->
+                        <Border x:Name="SuccessBanner"
+                                Visibility="Collapsed"
+                                Background="{StaticResource GreenSoftBrush}"
+                                BorderBrush="{StaticResource GreenBrush}"
+                                BorderThickness="1"
+                                CornerRadius="3"
+                                Padding="8,5"
+                                Margin="0,8,0,0">
+                            <TextBlock x:Name="TxtSuccessBanner"
+                                       FontSize="11.5"
+                                       Foreground="{StaticResource GreenBrush}"
+                                       TextWrapping="Wrap" />
+                        </Border>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </ScrollViewer>
+
+        <!-- Footer -->
+        <Border Grid.Row="1"
+                Background="{StaticResource ToolbarBrush}"
+                BorderBrush="{StaticResource BorderSoftBrush}"
+                BorderThickness="0,1,0,0"
+                Padding="14,8">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Content="Отмена"
+                        Click="BtnCancel_Click"
+                        Style="{StaticResource SecondaryButtonStyle}"
+                        MinWidth="76"
+                        Margin="0,0,6,0" />
+                <Button Content="Сохранить"
+                        Click="BtnSave_Click"
+                        Style="{StaticResource PrimaryButtonStyle}"
+                        MinWidth="88" />
+            </StackPanel>
+        </Border>
+    </Grid>
+</Window>

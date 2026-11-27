@@ -1,0 +1,106 @@
+<Window x:Class="PipelineGenWpf.Views.HumanInputWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Проверка данных"
+        Icon="/Resources/app.ico"
+        Width="620"
+        Height="460"
+        MinWidth="460"
+        MinHeight="340"
+        WindowStartupLocation="CenterOwner"
+        Background="{StaticResource BgBrush}"
+        FontFamily="{StaticResource UiFont}"
+        ShowInTaskbar="False">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!-- Head -->
+        <Border Grid.Row="0"
+                Background="{StaticResource ToolbarBrush}"
+                BorderBrush="{StaticResource BorderSoftBrush}"
+                BorderThickness="0,0,0,1"
+                Padding="12,8">
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                <Border Background="{StaticResource SurfaceBrush}"
+                        BorderBrush="{StaticResource BorderBrushMain}"
+                        BorderThickness="1"
+                        CornerRadius="3"
+                        Width="22"
+                        Height="22"
+                        Margin="0,0,8,0">
+                    <TextBlock x:Name="TxtStepNum"
+                               FontSize="11.5"
+                               FontWeight="SemiBold"
+                               Foreground="{StaticResource TextBrush}"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center" />
+                </Border>
+                <TextBlock x:Name="TxtStepTitle"
+                           FontSize="13"
+                           FontWeight="SemiBold"
+                           Foreground="{StaticResource TextBrush}"
+                           VerticalAlignment="Center" />
+            </StackPanel>
+        </Border>
+
+        <!-- Body -->
+        <Grid Grid.Row="1" Margin="12,10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <Border x:Name="InstructionBanner"
+                    Grid.Row="0"
+                    Visibility="Collapsed"
+                    Background="{StaticResource SurfaceBrush}"
+                    BorderBrush="{StaticResource BorderSoftBrush}"
+                    BorderThickness="1"
+                    CornerRadius="3"
+                    Padding="8,6"
+                    Margin="0,0,0,8">
+                <TextBlock x:Name="TxtInstruction"
+                           FontSize="11.5"
+                           Foreground="{StaticResource LabelBrush}"
+                           TextWrapping="Wrap" />
+            </Border>
+
+            <TextBlock Grid.Row="1"
+                       Text="Данные для следующего шага:"
+                       FontSize="11.5"
+                       FontWeight="SemiBold"
+                       Foreground="{StaticResource LabelBrush}"
+                       Margin="0,0,0,4" />
+
+            <TextBox x:Name="TxtValue"
+                     Grid.Row="2"
+                     Style="{StaticResource MonoTextBoxStyle}"
+                     AcceptsReturn="True"
+                     TextWrapping="Wrap"
+                     VerticalScrollBarVisibility="Auto"
+                     Padding="8" />
+        </Grid>
+
+        <!-- Footer -->
+        <Border Grid.Row="2"
+                Background="{StaticResource ToolbarBrush}"
+                BorderBrush="{StaticResource BorderSoftBrush}"
+                BorderThickness="0,1,0,0"
+                Padding="12,8">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Content="Остановить"
+                        Click="BtnStop_Click"
+                        Style="{StaticResource SecondaryButtonStyle}"
+                        Margin="0,0,6,0" />
+                <Button Content="Продолжить"
+                        Click="BtnContinue_Click"
+                        Style="{StaticResource PrimaryButtonStyle}" />
+            </StackPanel>
+        </Border>
+    </Grid>
+</Window>

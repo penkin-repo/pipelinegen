@@ -1,0 +1,412 @@
+<Window x:Class="PipelineGenWpf.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:views="clr-namespace:PipelineGenWpf.Views"
+        Title="PIP"
+        Icon="Resources/app.ico"
+        Width="1200"
+        Height="760"
+        MinWidth="860"
+        MinHeight="560"
+        WindowStartupLocation="CenterScreen"
+        Background="{StaticResource BgBrush}"
+        FontFamily="{StaticResource UiFont}"
+        TextOptions.TextFormattingMode="Display"
+        TextOptions.TextRenderingMode="ClearType"
+        UseLayoutRounding="True"
+        PreviewKeyDown="Window_PreviewKeyDown"
+        Closing="Window_Closing">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="24" />
+        </Grid.RowDefinitions>
+
+        <!-- Main 2-column area -->
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="220" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <!-- LEFT SIDEBAR -->
+            <Border Grid.Column="0"
+                    Background="{StaticResource Surface2Brush}"
+                    BorderBrush="{StaticResource BorderSoftBrush}"
+                    BorderThickness="0,0,1,0">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="42" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <!-- Brand Header -->
+                    <Border Grid.Row="0"
+                            Padding="10,0"
+                            Background="{StaticResource ToolbarBrush}"
+                            BorderBrush="{StaticResource BorderSoftBrush}"
+                            BorderThickness="0,0,0,1">
+                        <DockPanel VerticalAlignment="Center">
+                            <Button x:Name="BtnNewProject"
+                                    DockPanel.Dock="Right"
+                                    Content="+ Новый"
+                                    Style="{StaticResource SecondaryButtonStyle}"
+                                    Padding="8,2"
+                                    MinHeight="24"
+                                    FontSize="11.5"
+                                    Click="BtnNewProject_Click" />
+
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <Border Background="#FFFFFF"
+                                        BorderBrush="{StaticResource BorderBrushMain}"
+                                        BorderThickness="1"
+                                        CornerRadius="3"
+                                        Padding="5,1"
+                                        Margin="0,0,8,0">
+                                    <TextBlock Text="PIP"
+                                               FontSize="13"
+                                               FontWeight="ExtraBold"
+                                               Foreground="#C42B1C" />
+                                </Border>
+                                <TextBlock x:Name="TxtProjectsCount"
+                                           Text="0"
+                                           FontSize="11"
+                                           FontFamily="{StaticResource MonoFont}"
+                                           Foreground="{StaticResource MutedBrush}"
+                                           VerticalAlignment="Center" />
+                            </StackPanel>
+                        </DockPanel>
+                    </Border>
+
+                    <!-- Section Header -->
+                    <Border Grid.Row="1" Padding="10,7,10,4">
+                        <TextBlock Text="ПРОЕКТЫ"
+                                   FontSize="10"
+                                   FontWeight="SemiBold"
+                                   Foreground="{StaticResource SubtleMutedBrush}" />
+                    </Border>
+
+                    <!-- Projects List -->
+                    <ScrollViewer Grid.Row="2"
+                                  VerticalScrollBarVisibility="Auto"
+                                  HorizontalScrollBarVisibility="Disabled"
+                                  Padding="6,0,6,6">
+                        <StackPanel x:Name="ProjectsListPanel" />
+                    </ScrollViewer>
+
+                    <!-- Sidebar Footer -->
+                    <Border Grid.Row="3"
+                            Padding="8,7"
+                            Background="{StaticResource ToolbarBrush}"
+                            BorderBrush="{StaticResource BorderSoftBrush}"
+                            BorderThickness="0,1,0,0">
+                        <StackPanel>
+                            <Border x:Name="ApiWarningBanner"
+                                    Visibility="Collapsed"
+                                    Background="{StaticResource AmberSoftBrush}"
+                                    BorderBrush="{StaticResource AmberBorderBrush}"
+                                    BorderThickness="1"
+                                    CornerRadius="3"
+                                    Padding="7,4"
+                                    Margin="0,0,0,6"
+                                    Cursor="Hand"
+                                    MouseLeftButtonUp="ApiWarningBanner_Click">
+                                <TextBlock Text="Не задан API-ключ — настроить"
+                                           FontSize="11"
+                                           Foreground="{StaticResource AmberTextBrush}"
+                                           TextWrapping="Wrap" />
+                            </Border>
+
+                            <Button x:Name="BtnSettings"
+                                    Content="Настройки и модели"
+                                    Style="{StaticResource SecondaryButtonStyle}"
+                                    HorizontalAlignment="Stretch"
+                                    Padding="8,4"
+                                    Click="BtnSettings_Click" />
+                        </StackPanel>
+                    </Border>
+                </Grid>
+            </Border>
+
+            <!-- RIGHT WORKSPACE -->
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="42" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <!-- TOP BAR -->
+                <Border x:Name="TopBarBorder"
+                        Grid.Row="0"
+                        Background="{StaticResource ToolbarBrush}"
+                        BorderBrush="{StaticResource AccentBrush}"
+                        BorderThickness="0,0,0,2"
+                        Padding="12,0">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Editable Project Name & Save Status -->
+                        <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,10,0">
+                            <TextBox x:Name="TxtProjectName"
+                                     MinWidth="160"
+                                     MaxWidth="380"
+                                     FontSize="13.5"
+                                     FontWeight="SemiBold"
+                                     Foreground="{StaticResource TextBrush}"
+                                     Background="Transparent"
+                                     BorderBrush="Transparent"
+                                     BorderThickness="1"
+                                     Padding="5,2"
+                                     VerticalContentAlignment="Center"
+                                     ToolTip="Переименовать проект"
+                                     TextChanged="TxtProjectName_TextChanged"
+                                     GotFocus="TxtProjectName_GotFocus"
+                                     LostFocus="TxtProjectName_LostFocus" />
+
+                            <Border x:Name="SaveStatusBadge"
+                                    Margin="6,0,0,0"
+                                    Padding="6,2"
+                                    CornerRadius="3"
+                                    Background="Transparent"
+                                    VerticalAlignment="Center"
+                                    Cursor="Hand"
+                                    ToolTip="Сохранить (Ctrl+S)"
+                                    MouseLeftButtonUp="SaveStatusBadge_Click">
+                                <TextBlock x:Name="TxtSaveStatus"
+                                           Text="Сохранено"
+                                           FontSize="11"
+                                           Foreground="{StaticResource MutedBrush}" />
+                            </Border>
+                        </StackPanel>
+
+                        <!-- Compact Mode Switcher -->
+                        <Border Grid.Column="1"
+                                Background="{StaticResource SurfaceBrush}"
+                                BorderBrush="{StaticResource BorderBrushMain}"
+                                BorderThickness="1"
+                                CornerRadius="3"
+                                Padding="1"
+                                VerticalAlignment="Center"
+                                Margin="0,0,8,0">
+                            <StackPanel Orientation="Horizontal">
+                                <Button x:Name="BtnTabRunner"
+                                        Content="Запуск"
+                                        FontSize="12"
+                                        FontWeight="SemiBold"
+                                        Padding="11,3"
+                                        Cursor="Hand"
+                                        BorderThickness="0"
+                                        Click="BtnTabRunner_Click">
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border Background="{TemplateBinding Background}"
+                                                    CornerRadius="2"
+                                                    Padding="{TemplateBinding Padding}">
+                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                </Button>
+                                <Button x:Name="BtnTabBuilder"
+                                        Content="Конструктор"
+                                        FontSize="12"
+                                        FontWeight="SemiBold"
+                                        Padding="11,3"
+                                        Margin="1,0,0,0"
+                                        Cursor="Hand"
+                                        BorderThickness="0"
+                                        Click="BtnTabBuilder_Click">
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border Background="{TemplateBinding Background}"
+                                                    CornerRadius="2"
+                                                    Padding="{TemplateBinding Padding}">
+                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                </Button>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- README Button -->
+                        <Button Grid.Column="2"
+                                x:Name="BtnReadme"
+                                Content="README"
+                                Style="{StaticResource SecondaryButtonStyle}"
+                                VerticalAlignment="Center"
+                                Padding="9,3"
+                                MinHeight="24"
+                                Click="BtnReadme_Click" />
+                    </Grid>
+                </Border>
+
+                <!-- MAIN VIEWS HOST -->
+                <Grid Grid.Row="1">
+                    <views:PipelineRunnerView x:Name="RunnerView" Visibility="Visible" />
+                    <views:PipelineBuilderView x:Name="BuilderView" Visibility="Collapsed" />
+
+                    <!-- Empty State if no projects -->
+                    <StackPanel x:Name="EmptyStatePanel"
+                                Visibility="Collapsed"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Center">
+                        <TextBlock Text="Нет выбранного проекта"
+                                   FontSize="14" FontWeight="SemiBold"
+                                   Foreground="{StaticResource TextBrush}"
+                                   HorizontalAlignment="Center" />
+                        <Button Content="+ Создать проект"
+                                Style="{StaticResource PrimaryButtonStyle}"
+                                Margin="0,10,0,0"
+                                HorizontalAlignment="Center"
+                                Click="BtnNewProject_Click" />
+                    </StackPanel>
+
+                    <!-- Floating Toast -->
+                    <Border x:Name="ToastBorder"
+                            Visibility="Collapsed"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Bottom"
+                            Margin="0,0,14,12"
+                            Background="#2B2B2B"
+                            CornerRadius="3"
+                            Padding="10,6"
+                            IsHitTestVisible="False">
+                        <TextBlock x:Name="TxtToast"
+                                   Text=""
+                                   Foreground="White"
+                                   FontSize="11.5" />
+                    </Border>
+                </Grid>
+            </Grid>
+        </Grid>
+
+        <!-- COLLAPSIBLE LOG DRAWER -->
+        <Border x:Name="LogDrawerBorder"
+                Grid.Row="1"
+                Visibility="Collapsed"
+                Height="180"
+                Background="{StaticResource SurfaceBrush}"
+                BorderBrush="{StaticResource BorderSoftBrush}"
+                BorderThickness="0,1,0,0">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="28" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <Border Grid.Row="0"
+                        Background="{StaticResource ToolbarBrush}"
+                        BorderBrush="{StaticResource BorderLightBrush}"
+                        BorderThickness="0,0,0,1"
+                        Padding="10,0">
+                    <DockPanel>
+                        <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center">
+                            <Button Content="Копировать"
+                                    Style="{StaticResource GhostButtonStyle}"
+                                    Click="BtnCopyLogs_Click" />
+                            <Button Content="Очистить лог"
+                                    Style="{StaticResource GhostButtonStyle}"
+                                    Margin="2,0,0,0"
+                                    Click="BtnClearLogs_Click" />
+                            <Button Content="✕"
+                                    Style="{StaticResource GhostButtonStyle}"
+                                    Margin="2,0,0,0"
+                                    Click="BtnToggleLogs_Click" />
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="Журнал"
+                                       FontSize="11" FontWeight="SemiBold"
+                                       Foreground="{StaticResource LabelBrush}" />
+                            <TextBlock x:Name="TxtLogDrawerCount"
+                                       Text=" (0)"
+                                       FontSize="11" FontFamily="{StaticResource MonoFont}"
+                                       Foreground="{StaticResource MutedBrush}" />
+                        </StackPanel>
+                    </DockPanel>
+                </Border>
+
+                <ScrollViewer x:Name="LogScrollViewer"
+                              Grid.Row="1"
+                              VerticalScrollBarVisibility="Auto"
+                              HorizontalScrollBarVisibility="Disabled"
+                              Padding="10,4">
+                    <StackPanel x:Name="LogEntriesPanel" />
+                </ScrollViewer>
+            </Grid>
+        </Border>
+
+        <!-- STATUS BAR -->
+        <Border Grid.Row="2"
+                Background="{StaticResource ToolbarBrush}"
+                BorderBrush="{StaticResource BorderSoftBrush}"
+                BorderThickness="0,1,0,0"
+                Padding="10,0">
+            <DockPanel>
+                <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center">
+                    <Button x:Name="BtnToggleLogs"
+                            Style="{StaticResource GhostButtonStyle}"
+                            Padding="6,1"
+                            FontSize="11"
+                            Click="BtnToggleLogs_Click">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Логи" VerticalAlignment="Center" />
+                            <Border x:Name="LogCountPill"
+                                    Background="{StaticResource BorderLightBrush}"
+                                    CornerRadius="2"
+                                    Padding="4,0"
+                                    Margin="4,0,0,0">
+                                <TextBlock x:Name="TxtLogBadge"
+                                           Text="0"
+                                           FontSize="10"
+                                           FontFamily="{StaticResource MonoFont}"
+                                           Foreground="{StaticResource LabelBrush}" />
+                            </Border>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <Ellipse x:Name="StatusApiDot"
+                             Width="7" Height="7"
+                             Fill="{StaticResource GreenBrush}"
+                             Margin="0,0,6,0"
+                             VerticalAlignment="Center" />
+                    <TextBlock x:Name="TxtStatusApi"
+                               Text="API"
+                               FontSize="11"
+                               Foreground="{StaticResource LabelBrush}"
+                               VerticalAlignment="Center"
+                               Cursor="Hand"
+                               MouseLeftButtonUp="ApiWarningBanner_Click" />
+
+                    <TextBlock Text="  |  " FontSize="11" Foreground="{StaticResource BorderBrushMain}" VerticalAlignment="Center" />
+
+                    <TextBlock x:Name="TxtStatusModel"
+                               Text=""
+                               FontSize="11"
+                               FontFamily="{StaticResource MonoFont}"
+                               Foreground="{StaticResource MutedBrush}"
+                               VerticalAlignment="Center" />
+
+                    <TextBlock Text="  |  " FontSize="11" Foreground="{StaticResource BorderBrushMain}" VerticalAlignment="Center" />
+
+                    <TextBlock x:Name="TxtStatusStorage"
+                               Text=""
+                               FontSize="10.5"
+                               Foreground="{StaticResource SubtleMutedBrush}"
+                               VerticalAlignment="Center" />
+                </StackPanel>
+            </DockPanel>
+        </Border>
+    </Grid>
+</Window>

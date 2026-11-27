@@ -1,14 +1,12 @@
-# Build output
-build/bin
-frontend/dist
+# .NET / WPF build output
+bin/
+obj/
 *.exe
 *.exe~
-
-# Dependencies
-node_modules
-
-# Wails
-frontend/package.json.md5
+*.pdb
+*.cache
+*.user
+*.suo
 
 # Local user data (contains API key and saved pipelines)
 config.json
@@ -16,10 +14,9 @@ projects/
 
 # Logs
 *.log
-npm-debug.log*
-pnpm-debug.log*
 
 # Editors / IDE
+.vs/
 .idea/
 .vscode/
 .zed/
